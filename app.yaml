@@ -1,5 +1,5 @@
-application: inbound-email
-version: 1
+application: contactrouter-io
+version: inbound-email
 runtime: python27
 api_version: 1
 threadsafe: yes
