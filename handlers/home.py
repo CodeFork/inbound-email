@@ -30,6 +30,9 @@ class CacheHandler(webapp2.RequestHandler):
 class LogSenderHandler(InboundMailHandler):
     def receive(self, mail_message):
         """
+        See: https://cloud.google.com/appengine/docs/python/mail/receivingmail
+        See: https://blog.artooro.com/2012/04/04/how-to-handle-incoming-attachments-on-google-app-engine/
+        See: https://gist.github.com/russomi/10d08bfb14841ffbcb55
 
         :param mail_message:
         """
