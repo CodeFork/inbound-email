@@ -19,7 +19,6 @@ handlers:
 
 - url: /_ah/mail/.+
   script: main.app
-  login: admin
 
 - url: .*
   script: main.app

@@ -37,3 +37,8 @@ class LogSenderHandler(InboundMailHandler):
         :param mail_message:
         """
         logging.info("Received a message from: " + mail_message.sender)
+
+        # handle attachments
+        if hasattr(mail_message, 'attachments'):
+            for filename, filecontents in mail_message.attachments:
+                logging.info('filename={}'.format(filename))
