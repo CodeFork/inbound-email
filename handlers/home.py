@@ -5,6 +5,9 @@ import webapp2
 from google.appengine.api import memcache
 from google.appengine.ext.webapp.mail_handlers import InboundMailHandler
 
+from models.blob_files import BlobFiles
+
+GCS_UPLOAD_FOLDER = '/attachments'
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
@@ -42,3 +45,10 @@ class LogSenderHandler(InboundMailHandler):
         if hasattr(mail_message, 'attachments'):
             for filename, filecontents in mail_message.attachments:
                 logging.info('filename={}'.format(filename))
+                bf = BlobFiles.new(filename, folder=GCS_UPLOAD_FOLDER)
+                if bf:
+                    bf.blob_write(filecontents.decode())
+                    bf.put_async()
+                    logging.info('Uploaded and saved in default GCS bucket: ' + bf.gcs_filename)
+
+
