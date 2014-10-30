@@ -4,11 +4,12 @@ from google.appengine.ext import ndb
 from handlers.home import MainHandler
 from handlers.home import CacheHandler
 from handlers.home import LogSenderHandler
-
+from handlers.blob_server import BlobServerHandler
 
 routes = [('/', MainHandler),
           ('/cache', CacheHandler),
           ('/_ah/warmup', MainHandler),
+          ('/blobserver/([^/]+)?', BlobServerHandler),
           LogSenderHandler.mapping()]
 
 config = {'webapp2_extras.sessions': {

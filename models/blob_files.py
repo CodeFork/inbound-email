@@ -16,7 +16,7 @@ import logging
 # to use cloudstorage include appengine-gcs-client-python-r127.zip in your project
 
 config = lib_config.register('blob_files', {
-    'USE_BLOBSTORE': False,
+    'USE_BLOBSTORE': True,
     'ARCHIVE_PATH': '/archives/BlobFiles.zip',
     'UTF_8_FILE_EXTENSIONS': ['js', 'css', 'html', 'txt', 'text', 'py', 'xml']
 })
@@ -114,7 +114,7 @@ class BlobFiles(ndb.Model):
             self.serving_url = images.get_serving_url(self.blobkey, secure_url=True)
         elif webapp2.get_request().get('use_blobstore', default_value=config.USE_BLOBSTORE) in ['T', True]:
             # Blobstore: GCS blob keys do not have a BlobInfo filename
-            self.serving_url = '/use_blobstore/%s?save_as=%s' % (self.blobkey, self.filename)
+            self.serving_url = '/blobserver/%s?save_as=%s' % (self.blobkey, self.filename)
             # bf.serving_url = '/use_blobstore/%s?save_as=%s' % (blobstore.create_gs_key('/gs' + gcs_file_name), bf.filename)
         elif os.environ['SERVER_SOFTWARE'].startswith('Development'):
             # GCS url: this SDK feature has not been documented yet !!!
