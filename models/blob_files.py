@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import webapp2
 from google.appengine.ext import blobstore
 from google.appengine.api import app_identity, images
 from google.appengine.api import lib_config
@@ -12,8 +11,6 @@ import os
 import mimetypes
 import zipfile
 import logging
-
-# to use cloudstorage include appengine-gcs-client-python-r127.zip in your project
 
 config = lib_config.register('blob_files', {
     'USE_BLOBSTORE': True,
@@ -71,7 +68,7 @@ class BlobFiles(ndb.Model):
 
         return blobstore.BlobReader(blobstore.BlobKey(self.blobkey))
 
-    def blob_write(self, blob):
+    def blob_write(self, blob, **options):
         """ update google cloud storage bf entity """
 
         content_type = mimetypes.guess_type(self.filename)[0]
@@ -81,8 +78,7 @@ class BlobFiles(ndb.Model):
         if content_type and self.extension in config.UTF_8_FILE_EXTENSIONS:
             content_type += b'; charset=utf-8'
         try:
-            with gcs.open(self.gcs_filename, 'w', content_type=content_type or b'binary/octet-stream',
-                          options={b'x-goog-acl': b'public-read'}) as f:
+            with gcs.open(self.gcs_filename, 'w', content_type=content_type or b'binary/octet-stream', options=options) as f:
                 f.write(blob)
             return self.gcs_filename
         except Exception, e:
@@ -112,7 +108,7 @@ class BlobFiles(ndb.Model):
         if self.extension in ['jpeg', 'jpg', 'png', 'gif', 'bmp', 'tiff', 'ico']:  # image API supported formats
             # High-performance dynamic image serving
             self.serving_url = images.get_serving_url(self.blobkey, secure_url=True)
-        elif webapp2.get_request().get('use_blobstore', default_value=config.USE_BLOBSTORE) in ['T', True]:
+        elif config.USE_BLOBSTORE:
             # Blobstore: GCS blob keys do not have a BlobInfo filename
             self.serving_url = '/blobserver/%s?save_as=%s' % (self.blobkey, self.filename)
             # bf.serving_url = '/use_blobstore/%s?save_as=%s' % (blobstore.create_gs_key('/gs' + gcs_file_name), bf.filename)
