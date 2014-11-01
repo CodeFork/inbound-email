@@ -1,8 +1,5 @@
-inbound-email
-=============
-
+## inbound-email
 Example of inbound email on app engine
-
 * Send email with attachment to anything@contactrouter-io.appspotmail.com
 * App Engine posts inbound message and attachment to /_ah/mail/.+ which routes to ```LogSenderHandler(InboundMailHandler)```
 
@@ -25,7 +22,8 @@ class LogSenderHandler(InboundMailHandler):
                     logging.info('Uploaded and saved in default GCS bucket: ' + bf.gcs_filename)
 
 ```
-* uses cloud storage and blobstore to save attachments
+* uses cloud storage to save attachments
+* uses blobstore to serve files
 
 ```python
 
@@ -68,11 +66,18 @@ test_mail.py http://localhost:8080 test@example.com something@appname.appspotmai
 
         
 ```
+* saves files based on mail_message properties
 
-* See also:
-    * https://cloud.google.com/appengine/docs/python/mail/receivingmail
-    * https://blog.artooro.com/2012/04/04/how-to-handle-incoming-attachments-on-google-app-engine/
-    * https://gist.github.com/russomi/10d08bfb14841ffbcb55
+### References
 
-* Based on https://github.com/voscausa/appengine-gcs-blobstore-python
+- [Receiving Email](https://cloud.google.com/appengine/docs/python/mail/receivingmail "Receiving Email") - Google App Engine Python Documentation
+
+  > **Products > Documentation > Google App Engine > Python**
+  
+  > Email messages sent to your app are implemented as HTTP requests. To process incoming email messages, you associate email addresses with script handlers in your app configuration, then include the handlers in your app's code. Incoming email generates HTTP requests, which are passed to the appropriate scripts.
+
+- https://cloud.google.com/appengine/docs/python/mail/receivingmail
+- https://blog.artooro.com/2012/04/04/how-to-handle-incoming-attachments-on-google-app-engine/
+- https://gist.github.com/russomi/10d08bfb14841ffbcb55
+- Based on https://github.com/voscausa/appengine-gcs-blobstore-python
 
