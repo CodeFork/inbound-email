@@ -3,7 +3,7 @@ inbound-email
 
 Example of inbound email on app engine
 
-* Send email with attachment to something@appname.appspotmail.com
+* Send email with attachment to anything@contactrouter-io.appspotmail.com
 * App Engine posts inbound message and attachment to /_ah/mail/.+ which routes to ```LogSenderHandler(InboundMailHandler)```
 
 ```python
