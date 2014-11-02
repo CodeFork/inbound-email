@@ -1,7 +1,7 @@
 ## inbound-email
 Example of inbound email on app engine
 * Send email with attachment to anything@contactrouter-io.appspotmail.com
-* TODO: contactrouter.io mail redirect to contactrouter-io.appspotmail.com
+* **TODO**: contactrouter.io mail redirect to contactrouter-io.appspotmail.com ... See this [answer](http://stackoverflow.com/a/1700264/445769) on stackoverflow.
 * App Engine posts inbound message and attachment to /_ah/mail/.+ which routes to ```LogSenderHandler(InboundMailHandler)```
 
 ```python
@@ -73,9 +73,6 @@ class BlobFiles(ndb.Model):
             ...
             ...
 ```
-            
-
-
 
 * test_mail.py script to unit test email and attachment
 
@@ -88,7 +85,7 @@ test_mail.py http://localhost:8080 test@example.com something@appname.appspotmai
 
         
 ```
-* TODO: saves files based on mail_message properties
+* **TODO**: saves files based on mail_message properties
 
 ### Reference
 
@@ -101,5 +98,7 @@ test_mail.py http://localhost:8080 test@example.com something@appname.appspotmai
 - https://cloud.google.com/appengine/docs/python/mail/receivingmail
 - https://blog.artooro.com/2012/04/04/how-to-handle-incoming-attachments-on-google-app-engine/
 - https://gist.github.com/russomi/10d08bfb14841ffbcb55
-- Based on https://github.com/voscausa/appengine-gcs-blobstore-python
+- http://stackoverflow.com/a/1700264/445769
+- https://code.google.com/p/googleappengine/issues/detail?id=2314
+- Based on... https://github.com/voscausa/appengine-gcs-blobstore-python
 
