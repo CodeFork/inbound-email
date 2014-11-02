@@ -1,6 +1,7 @@
 ## inbound-email
 Example of inbound email on app engine
 * Send email with attachment to anything@contactrouter-io.appspotmail.com
+* TODO: contactrouter.io mail redirect to contactrouter-io.appspotmail.com
 * App Engine posts inbound message and attachment to /_ah/mail/.+ which routes to ```LogSenderHandler(InboundMailHandler)```
 
 ```python
@@ -23,7 +24,6 @@ class LogSenderHandler(InboundMailHandler):
 
 ```
 * uses cloud storage to save attachments
-* uses blobstore to serve files
 
 ```python
 
@@ -54,7 +54,29 @@ class BlobFiles(ndb.Model):
         ...
         ...
 ```
- 
+* uses blobstore to serve files
+* uses images api to serve images
+
+```python
+
+    def _pre_put_hook(self):
+        """ ndb hook to save serving_url """
+
+        if self.extension in ['jpeg', 'jpg', 'png', 'gif', 'bmp', 'tiff', 'ico']:  # image API supported formats
+            # High-performance dynamic image serving
+            self.serving_url = images.get_serving_url(self.blobkey, secure_url=True)
+        elif config.USE_BLOBSTORE:
+            # Blobstore: GCS blob keys do not have a BlobInfo filename
+            self.serving_url = '/blobserver/%s?save_as=%s' % (self.blobkey, self.filename)
+            # bf.serving_url = '/use_blobstore/%s?save_as=%s' % (blobstore.create_gs_key('/gs' + gcs_file_name), bf.filename)
+            ...
+            ...
+            ...
+```
+            
+
+
+
 * test_mail.py script to unit test email and attachment
 
 ```sh
@@ -66,9 +88,9 @@ test_mail.py http://localhost:8080 test@example.com something@appname.appspotmai
 
         
 ```
-* saves files based on mail_message properties
+* TODO: saves files based on mail_message properties
 
-### References
+### Reference
 
 - [Receiving Email](https://cloud.google.com/appengine/docs/python/mail/receivingmail "Receiving Email") - Google App Engine Python Documentation
 
